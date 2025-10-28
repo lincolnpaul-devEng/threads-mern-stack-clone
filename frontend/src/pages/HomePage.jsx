@@ -15,7 +15,9 @@ const HomePage = () => {
 			setLoading(true);
 			setPosts([]);
 			try {
-				const res = await fetch("/api/posts/feed");
+				const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/posts/feed`, {
+					credentials: "include"
+				});
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -24,7 +26,7 @@ const HomePage = () => {
 				console.log(data);
 				setPosts(data);
 			} catch (error) {
-				showToast("Error", error.message, "error");
+				showToast("Error", error.message || "An error occurred", "error");
 			} finally {
 				setLoading(false);
 			}

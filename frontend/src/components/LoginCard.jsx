@@ -49,7 +49,7 @@ export default function LoginCard() {
 			localStorage.setItem("user-threads", JSON.stringify(data));
 			setUser(data);
 		} catch (error) {
-			showToast("Error", error, "error");
+			showToast("Error", error.message || "An error occurred", "error");
 		} finally {
 			setLoading(false);
 		}

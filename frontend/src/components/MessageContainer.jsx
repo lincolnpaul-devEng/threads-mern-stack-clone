@@ -87,7 +87,9 @@ const MessageContainer = () => {
 			setMessages([]);
 			try {
 				if (selectedConversation.mock) return;
-				const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+				const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/messages/${selectedConversation.userId}`, {
+					credentials: "include"
+				});
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -95,7 +97,7 @@ const MessageContainer = () => {
 				}
 				setMessages(data);
 			} catch (error) {
-				showToast("Error", error.message, "error");
+				showToast("Error", error.message || "An error occurred", "error");
 			} finally {
 				setLoadingMessages(false);
 			}

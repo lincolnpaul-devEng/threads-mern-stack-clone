@@ -9,10 +9,14 @@ export default defineConfig({
 		// Get rid of the CORS error
 		proxy: {
 			"/api": {
-				target: "http://localhost:5000",
+				target: "http://localhost:3001",
 				changeOrigin: true,
 				secure: false,
 			},
 		},
+	},
+	define: {
+		// Expose env vars to client-side code
+		__APP_ENV__: JSON.stringify(process.env.NODE_ENV),
 	},
 });

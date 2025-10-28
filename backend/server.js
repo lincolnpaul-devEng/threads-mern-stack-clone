@@ -1,6 +1,7 @@
 import path from "path";
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./db/connectDB.js";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/userRoutes.js";
@@ -25,6 +26,12 @@ cloudinary.config({
 });
 
 // Middlewares
+app.use(cors({
+	origin: process.env.NODE_ENV === "production"
+		? process.env.FRONTEND_URL || "https://threadmernstack.netlify.app"
+		: "http://localhost:3000",
+	credentials: true
+}));
 app.use(express.json({ limit: "50mb" })); // To parse JSON data in the req.body
 app.use(express.urlencoded({ extended: true })); // To parse form data in the req.body
 app.use(cookieParser());

@@ -12,7 +12,9 @@ const SuggestedUsers = () => {
 		const getSuggestedUsers = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch("/api/users/suggested");
+				const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/users/suggested`, {
+					credentials: "include"
+				});
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -20,7 +22,7 @@ const SuggestedUsers = () => {
 				}
 				setSuggestedUsers(data);
 			} catch (error) {
-				showToast("Error", error.message, "error");
+				showToast("Error", error.message || "An error occurred", "error");
 			} finally {
 				setLoading(false);
 			}

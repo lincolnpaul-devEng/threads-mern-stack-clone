@@ -27,12 +27,24 @@ cloudinary.config({
 
 // Middlewares
 app.use(cors({
-	origin: process.env.NODE_ENV === "production"
-		? process.env.FRONTEND_URL || "https://threadmernstack.netlify.app"
-		: "http://localhost:3000",
+	origin: function (origin, callback) {
+		// Allow requests with no origin (mobile apps, curl, etc.)
+		if (!origin) return callback(null, true);
+
+		const allowedOrigins = process.env.NODE_ENV === "production"
+			? [process.env.FRONTEND_URL || "https://threadmernstack.netlify.app"]
+			: ["http://localhost:3000"];
+
+		if (allowedOrigins.includes(origin)) {
+			return callback(null, true);
+		} else {
+			return callback(new Error('Not allowed by CORS'));
+		}
+	},
 	credentials: true,
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-	allowedHeaders: ["Content-Type", "Authorization"]
+	allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+	optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 }));
 app.use(express.json({ limit: "50mb" })); // To parse JSON data in the req.body
 app.use(express.urlencoded({ extended: true })); // To parse form data in the req.body

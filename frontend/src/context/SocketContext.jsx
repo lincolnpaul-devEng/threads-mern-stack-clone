@@ -3,11 +3,7 @@ import { useRecoilValue } from "recoil";
 import io from "socket.io-client";
 import userAtom from "../atoms/userAtom";
 
-const SocketContext = createContext();
-
-export const useSocket = () => {
-	return useContext(SocketContext);
-};
+export const SocketContext = createContext();
 
 export const SocketContextProvider = ({ children }) => {
 	const [socket, setSocket] = useState(null);

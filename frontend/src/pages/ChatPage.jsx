@@ -43,7 +43,9 @@ const ChatPage = () => {
 	useEffect(() => {
 		const getConversations = async () => {
 			try {
-				const res = await fetch("/api/messages/conversations");
+				const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/messages/conversations`, {
+					credentials: "include"
+				});
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -52,7 +54,7 @@ const ChatPage = () => {
 				console.log(data);
 				setConversations(data);
 			} catch (error) {
-				showToast("Error", error.message, "error");
+				showToast("Error", error.message || "An error occurred", "error");
 			} finally {
 				setLoadingConversations(false);
 			}
@@ -65,7 +67,7 @@ const ChatPage = () => {
 		e.preventDefault();
 		setSearchingUser(true);
 		try {
-			const res = await fetch(`/api/users/profile/${searchText}`);
+			const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/users/profile/${searchText}`);
 			const searchedUser = await res.json();
 			if (searchedUser.error) {
 				showToast("Error", searchedUser.error, "error");

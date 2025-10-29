@@ -40,6 +40,7 @@ export default function LoginCard() {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(inputs),
+				credentials: "include", // Ensure cookies are sent and received
 			});
 			const data = await res.json();
 			if (data.error) {
@@ -48,6 +49,9 @@ export default function LoginCard() {
 			}
 			localStorage.setItem("user-threads", JSON.stringify(data));
 			setUser(data);
+			
+			// Add a small delay to ensure authentication cookie is properly set
+			await new Promise(resolve => setTimeout(resolve, 100));
 		} catch (error) {
 			showToast("Error", error.message || "An error occurred", "error");
 		} finally {
